@@ -1,3 +1,5 @@
+
+
 body{
     background-image:url('image7.jpg');
     background-repeat:no-repeat;
@@ -41,4 +43,28 @@ button {
 special3{
     background-color: rgba(8, 8, 8, 0.8);
     color:rgb(213, 221, 50);
+}
+.gif-container{
+    position:absolute;
+    bottom:20px;
+    width:calc(100%-40px);
+}
+.music-gif{
+    position:absolute;
+    bottom:50%;
+    left:0;
+    transform: translateY(-50%);
+
+}
+.car-gif{
+    position:absolute;
+    top:40%;
+    right:20px;
+    transform: translateY(-50%);
+    z-index:1;
+}
+.gif{
+    width: 100px;
+    height:auto;
+
 }

@@ -18,8 +18,7 @@ var hits = {
 var isPlaying = false;
 var speed = 0;
 var FPS = 0;
-
-var track
+var track;
 
 let score = JSON.parse(localStorage.getItem('score')) || {};
 
@@ -69,3 +68,6 @@ var initializeNotes = function () {
     });
   };
 
+  var movingNotes = function(){
+
+  }

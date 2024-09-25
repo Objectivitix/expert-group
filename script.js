@@ -1,7 +1,3 @@
-
-
-alert("best cs group ever");
-
 var ishold = {
     a: false,
     s: false,

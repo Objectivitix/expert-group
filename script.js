@@ -1,3 +1,5 @@
+let countdown = 3;
+
 var ishold = {
   a: false,
   s: false,
@@ -114,4 +116,21 @@ const song = {
 
 
 startGame(song, 2);  
+
+function startCountdown() {
+  const interval = setInterval(() => {
+      countdown--;
+      if (countdown > 0) {
+          countdownElement.textContent = countdown;
+      } else if (countdown === 0) {
+          countdownElement.textContent = 'Start!';
+          setTimeout(() => {
+              countdownElement.style.display = 'none';
+              startFallingBoxes();
+          }, 2000);
+      } else {
+          clearInterval(interval);
+      }
+  }, 1500);
+}
 

@@ -1,15 +1,15 @@
 var ishold = {
-    a: false,
-    s: false,
-    d: false,
-    f: false
-}
+  a: false,
+  s: false,
+  d: false,
+  f: false
+};
 
 var hits = {
-    good: 0,
-    well: 0,
-    miss: 0
-}
+  good: 0,
+  well: 0,
+  miss: 0
+};
 
 var isPlaying = false;
 var speed = 0;
@@ -18,52 +18,100 @@ var track;
 
 let score = JSON.parse(localStorage.getItem('score')) || {};
 
-noteElement = 
+let noteElement;
 
-function generate(orbital,test,boolean,level){
-//note is the object
-let FPS;
-if(level === 1){
-    FPS = 30;
-}
-else if(level === 2){
-    FPS = 60;
-}
-while(boolean){
-    
-    Math.random()*(orbital - 0)+0;
-        //0 is the left and orbital is right
-    
+
+function generate(orbital, test, boolean, level) {
+  if (level === 1) {
+      FPS = 30;
+  } else if (level === 2) {
+      FPS = 60;
+  }
+
+  while (boolean) {
+     
+      let randomPosition = Math.random() * (orbital - 0) + 0;
+
+     
+      console.log(`Generated note at position: ${randomPosition}`);
+
+      boolean = false;
+  }
 }
 
-    
-}
+var initializeNotes = function (song) {
+  let trackContainer = document.getElementById('track-container');
+  var noteElement;
+  var trackElement;
 
-var initializeNotes = function () {
-    var noteElement;
-    var trackElement;
-  
-    while (trackContainer.hasChildNodes()) {
+  while (trackContainer.hasChildNodes()) {
       trackContainer.removeChild(trackContainer.lastChild);
-    }
-  
-    song.sheet.forEach(function (key, index) {
+  }
+
+  song.sheet.forEach(function (key, index) {
       trackElement = document.createElement('div');
       trackElement.classList.add('track');
-  
+
       key.notes.forEach(function (note) {
-        noteElement = document.createElement('div');
-        noteElement.classList.add('note');
-        noteElement.classList.add('note--' + index);
-        trackElement.appendChild(noteElement);
+          noteElement = document.createElement('div');
+          noteElement.classList.add('note');
+          noteElement.classList.add('note--' + index);
+
+          noteElement.style.top = '-50px';
+
+          trackElement.appendChild(noteElement);
       });
-  
-     
+
       trackContainer.appendChild(trackElement);
-      tracks = document.querySelectorAll('.track');
-    });
-  };
+  });
 
-  var movingNotes = function(){
+  tracks = document.querySelectorAll('.track');
+};
 
-  }
+var movingNotes = function () {
+ 
+  tracks.forEach(function (track) {
+      let notes = track.querySelectorAll('.note');
+      
+      notes.forEach(function (note) {
+          let topPosition = parseFloat(window.getComputedStyle(note).getPropertyValue('top'));
+          
+         
+          if (topPosition < window.innerHeight) {
+             
+              note.style.top = `${topPosition + speed}px`;
+          } else {
+            
+              hits.miss++;
+              note.remove();
+          }
+      });
+  });
+
+  requestAnimationFrame(movingNotes);
+};
+
+
+
+function startGame(song, gameSpeed) {
+  isPlaying = true;
+  speed = gameSpeed;
+
+
+  initializeNotes(song);
+  movingNotes();
+}
+
+
+const song = {
+  sheet: [
+      { notes: [{}, {}, {}] },  
+      { notes: [{}, {}] },      
+      { notes: [{}] },       
+      { notes: [{}, {}, {}] }  
+  ]
+};
+
+
+startGame(song, 2);  
+

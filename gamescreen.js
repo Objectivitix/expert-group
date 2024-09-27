@@ -14,28 +14,27 @@ function startCountdown() {
             setTimeout(() => {
                 countdownElement.style.display = 'none';
                 startFallingBoxes();
-            }, 2000);
+            }, 1000);
         } else {
             clearInterval(interval);
         }
-    }, 1500);
+    }, 1000);
 }
 
 function startFallingBoxes() {
-    
     generateFallingBox();
 }
 
 function generateFallingBox() {
     const newBox = document.createElement('div');
     newBox.classList.add('falling-box');
-    
+
     const randomX = Math.random() * (gameContainer.offsetWidth - 50); 
     newBox.style.left = `${randomX}px`;
-    
+
     gameContainer.appendChild(newBox);
-    
-    newBox.style.animation = 'fall 2s linear forwards';
+
+    newBox.style.animation = 'fall 100s linear forwards';
 
     const randomInterval = Math.random() * (intervalMax - intervalMin) + intervalMin;
     setTimeout(generateFallingBox, randomInterval);

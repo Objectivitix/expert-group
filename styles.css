@@ -72,7 +72,7 @@ button {
 
 body{
     background-image:url('resources/media/background.jpg');
-    backdrop-filter: brightness(1);
+    backdrop-filter: brightness(0.4);
     background-repeat:no-repeat;
     background-attachment:fixed;
     background-size:cover;
@@ -129,23 +129,37 @@ h1 {
     position:absolute;
     bottom:20px;
     width:calc(100%-40px);
+    filter: brightness(0.4);
 }
+
 .music-gif{
     position: absolute;
-    bottom: 50%;
-    left: 0;    
+    bottom:70px;
+    left:250px;
     transform: translateY(-50%);    
     width: 20%; 
     height: auto;
 
 }
+
+.music-gif > img {
+  width:200px;
+  height:auto;
+}
+
 .car-gif {
     position: absolute;
     bottom: 0;
-    left: 200px;
+    left: 250px;
     transform: translateY(-50%);
     z-index: 1;
 }
+
+.car-gif > img {
+  width:500px;
+  height:auto;
+}
+
 .gif{
     width: 100px;
     height:auto;

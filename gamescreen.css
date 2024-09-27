@@ -1,3 +1,75 @@
+/* RESET */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+*:focus {
+  outline: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+button,
+input {
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: 100%;
+}
+
+/* GLOBAL */
+
+:root {
+  --roboto: "Roboto", sans-serif;
+
+  --fs-900: 2.250rem;
+  --fs-800: 1.875rem;
+  --fs-700: 1.500rem;
+  --fs-600: 1.250rem;
+  --fs-500: 1.125rem;
+  --fs-400: 1.000rem;
+  --fs-300: 0.875rem;
+
+  --primary: hsl(298, 89%, 45%);
+  --accent: hsl(19, 96%, 56%);
+  --text: hsl(0, 0%, 9%);
+
+  --shadow: 2px 4px 8px -3px hsl(0 0% 0% / 25%);
+
+  --transition-slow: 500ms;
+  --transition-medium: 250ms;
+  --transition-fast: 200ms;
+}
+
+body {
+  font-family: var(--roboto);
+  font-size: var(--fs-400);
+  color: var(--text);
+}
+
+h1 { font-size: var(--fs-800); }
+h2 { font-size: var(--fs-700); }
+h3 { font-size: var(--fs-600); }
+h4 { font-size: var(--fs-500); }
+h5 { font-size: var(--fs-400); }
+
+button {
+  cursor: pointer;
+}
+
+/* ACTUAL CODE (above was general config to look pretty) */
+
 #songTitle {
   text-align: center;
   font-family: Arial, sans-serif;
@@ -11,9 +83,43 @@
   height: 100vh;
 }
 
+#songTitle {
+  position: absolute;
+}
+
+#track-container {
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 550px;
+  height: 100%;
+}
+
+.lane {
+  flex-grow: 1;
+  width: 100%;
+  height: 90%;
+  background-color: #4CAF50;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.indicator {
+  width: 70px;
+  height: 70px;
+  background-color: #f44336;
+  border-radius: 50%;
+  margin-top: auto;
+  margin-bottom: 120px;
+}
+
 #countdown {
   color: black;
-  position: relative;
+  position: absolute;
   top: 50%;
   transform: translateY(-50%);
   text-align: center;

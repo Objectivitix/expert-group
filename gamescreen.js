@@ -29,13 +29,65 @@ function startFallingBoxes() {
     generateFallingBox();
     document.addEventListener('keydown', (e) => {
         if (e.key === 'd') {
-          noteQueues[0].shift()?.remove();
+            if (noteQueues[0].length === 0) {
+                return;
+            }
+            const note = noteQueues[0].shift();
+            const timeElapsed = Date.now() - note.startTime;
+            note.remove();
+
+            if (Math.abs(timeElapsed - 2590) < 100) {
+                console.log("perfect note")
+            } else if (Math.abs(timeElapsed - 2590) < 250) {
+                console.log("good note")
+            } else {
+                console.log("offbeat note")
+            }
         } else if (e.key === 'f') {
-            noteQueues[1].shift()?.remove();
+            if (noteQueues[1].length === 0) {
+                return;
+            }
+            const note = noteQueues[1].shift();
+            const timeElapsed = Date.now() - note.startTime;
+            note.remove();
+
+            if (Math.abs(timeElapsed - 2590) < 100) {
+                console.log("perfect note")
+            } else if (Math.abs(timeElapsed - 2590) < 250) {
+                console.log("good note")
+            } else {
+                console.log("offbeat note")
+            }
         } else if (e.key === 'j') {
-            noteQueues[2].shift()?.remove();
+            if (noteQueues[2].length === 0) {
+                return;
+            }
+            const note = noteQueues[2].shift();
+            const timeElapsed = Date.now() - note.startTime;
+            note.remove();
+
+            if (Math.abs(timeElapsed - 2590) < 100) {
+                console.log("perfect note")
+            } else if (Math.abs(timeElapsed - 2590) < 250) {
+                console.log("good note")
+            } else {
+                console.log("offbeat note")
+            }
         } else if (e.key === 'k') {
-            noteQueues[3].shift()?.remove();
+            if (noteQueues[3].length === 0) {
+                return;
+            }
+            const note = noteQueues[3].shift();
+            const timeElapsed = Date.now() - note.startTime;
+            note.remove();
+
+            if (Math.abs(timeElapsed - 2590) < 100) {
+                console.log("perfect note")
+            } else if (Math.abs(timeElapsed - 2590) < 250) {
+                console.log("good note")
+            } else {
+                console.log("offbeat note")
+            }
         }
     });
 }
@@ -54,6 +106,7 @@ function generateFallingBox() {
     noteQueues[randomLane].push(newBox);
 
     newBox.style.animation = 'fall 3s linear forwards';
+    newBox.startTime = Date.now();
     setTimeout(() => {
         if (!document.body.contains(newBox)) {
             return;

@@ -3,6 +3,8 @@ const countdownElement = document.getElementById('countdown');
 const gameContainer = document.getElementById('game-container');
 const trackContainer = document.getElementById('track-container');
 const lane = document.querySelector('.lane');
+const logContainer = document.getElementById('log-container'); // Get the log container
+perfectStreak = 0;
 
 // Constants for countdown and note intervals
 const intervalMin = 500;
@@ -11,6 +13,22 @@ let countdown = 3;
 
 // Note queues for each lane
 const noteQueues = [[], [], [], []];
+
+// Utility function to log messages to the right-side log container
+function logMessage(message) {
+    // Clear any previous log message
+    logContainer.innerHTML = '';
+
+    // Create new log message
+    const logEntry = document.createElement('div');
+    logEntry.textContent = message;
+
+    // Add a class for styling the log entry
+    logEntry.classList.add('log-entry');
+
+    logContainer.appendChild(logEntry);
+}
+
 
 // Start countdown for game
 function startCountdown() {
@@ -25,9 +43,7 @@ function startCountdown() {
                 startFallingBoxes();
             }, 1000);
         } else {
-            // Stop the function from continuing to run
-            // periodically once countdown is finished
-            clearInterval(interval);
+            clearInterval(interval); // Stop the countdown
         }
     }, 1000); // Update countdown every 1000 ms
 }
@@ -43,17 +59,25 @@ function startFallingBoxes() {
             const timeElapsed = Date.now() - note.startTime; // Calculate time since note started
             note.remove(); // Remove the note from the DOM
 
-            // Determine note accuracy.
-            // 2590 ms is obtained via trial and error
-            // to be an okay approximation of how long
-            // it takes for a note to get to the hit
-            // indicator
+            // Determine note accuracy
             if (Math.abs(timeElapsed - 2590) < 100) {
-                console.log("perfect note");
+                logContainer.style.color = 'gold';
+                perfectStreak ++;
+                if (perfectStreak > 1){
+                    logMessage("Perfect note\nx" + perfectStreak);
+                }
+                else{
+                    logMessage("Perfect note");
+                }
             } else if (Math.abs(timeElapsed - 2590) < 250) {
-                console.log("good note");
+                logContainer.style.color = 'green';
+                logMessage("Good note");
+                perfectStreak = 0;
             } else {
-                console.log("offbeat note");
+                logMessage("Offbeat note");
+                logContainer.style.color = 'purple';
+                perfectStreak = 0;
+
             }
         }
     });
@@ -79,7 +103,9 @@ function generateFallingBox() {
         if (!document.body.contains(newNote)) return; // If note has already been removed, return
         newNote.remove();
         noteQueues[randomLane].shift(); // Remove from the queue
-        console.log("missed note");
+        logContainer.style.color = 'red';
+        logMessage("Missed note");
+        perfectStreak = 0;
     }, 3000);
 
     // Schedule next note generation

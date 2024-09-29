@@ -109,16 +109,24 @@ button {
 }
 
 .indicator {
-  width: 70px;
-  height: 70px;
-  background-color: #f44336;
-  border-radius: 50%;
+  width: 57px; 
+  height: 120px; 
+  border: 5px solid #f44336; 
+  background-color: transparent; 
+  border-radius: 5px; 
   margin-top: auto;
-  margin-bottom: 120px;
+  margin-bottom: 80px; 
+
+  color: black;
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+
 #countdown {
-  color: black;
+  color: rgb(48, 17, 17);
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -143,4 +151,17 @@ button {
   100% {
     top: 90%;
   }
+}
+
+#log-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.log-entry {
+  font-size: 48px;
+  font-weight: bold;
+  text-align: center;
+  padding-left: 20px;
 }

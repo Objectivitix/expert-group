@@ -2,35 +2,30 @@
 const countdownElement = document.getElementById('countdown');
 const gameContainer = document.getElementById('game-container');
 const trackContainer = document.getElementById('track-container');
-const lane = document.querySelector('.lane');
-const logContainer = document.getElementById('log-container'); // Get the log container
-perfectStreak = 0;
-
-// Constants for countdown and note intervals
-const intervalMin = 500;
-const intervalMax = 2000; 
+const lanes = document.querySelectorAll('.lane');
+const logContainer = document.getElementById('log-container');
+const gameMusic = document.getElementById('gameMusic');
 let countdown = 3;
+let perfectStreak = 0;
+
+// Constants for note intervals
+const intervalMin = 500;
+const intervalMax = 2000;
 
 // Note queues for each lane
 const noteQueues = [[], [], [], []];
 
 // Utility function to log messages to the right-side log container
-function logMessage(message) {
-    // Clear any previous log message
-    logContainer.innerHTML = '';
-
-    // Create new log message
+function logMessage(message, color = 'black') {
+    logContainer.innerHTML = ''; // Clear previous log
     const logEntry = document.createElement('div');
     logEntry.textContent = message;
-
-    // Add a class for styling the log entry
     logEntry.classList.add('log-entry');
-
+    logEntry.style.color = color; // Set log text color
     logContainer.appendChild(logEntry);
 }
 
-
-// Start countdown for game
+// Start countdown for the game
 function startCountdown() {
     const interval = setInterval(() => {
         countdown--;
@@ -40,78 +35,105 @@ function startCountdown() {
             countdownElement.textContent = 'Start!';
             setTimeout(() => {
                 countdownElement.style.display = 'none'; // Hide countdown
-                startFallingBoxes();
-            }, 1000);
+                gameMusic.play();
+                fetchBeatInfoAndStart(); // Start the game based on beat info
+            });
         } else {
             clearInterval(interval); // Stop the countdown
         }
-    }, 1000); // Update countdown every 1000 ms
-}
-
-// Start generating and handling falling boxes
-function startFallingBoxes() {
-    generateFallingBox(); // Generate first falling box
-    document.addEventListener('keydown', (e) => {
-        const laneIndex = {'d': 0, 'f': 1, 'j': 2, 'k': 3}[e.key]; // Map key presses to lanes
-
-        if (laneIndex !== undefined && noteQueues[laneIndex].length > 0) {
-            const note = noteQueues[laneIndex].shift(); // Get the note from the corresponding queue
-            const timeElapsed = Date.now() - note.startTime; // Calculate time since note started
-            note.remove(); // Remove the note from the DOM
-
-            // Determine note accuracy
-            if (Math.abs(timeElapsed - 2590) < 100) {
-                logContainer.style.color = 'gold';
-                perfectStreak ++;
-                if (perfectStreak > 1){
-                    logMessage("Perfect note\nx" + perfectStreak);
-                }
-                else{
-                    logMessage("Perfect note");
-                }
-            } else if (Math.abs(timeElapsed - 2590) < 250) {
-                logContainer.style.color = 'green';
-                logMessage("Good note");
-                perfectStreak = 0;
-            } else {
-                logMessage("Offbeat note");
-                logContainer.style.color = 'purple';
-                perfectStreak = 0;
-
-            }
-        }
-    });
+    }); // Update countdown every 1000 ms
 }
 
 // Generate falling boxes (notes) in random lanes
-function generateFallingBox() {
-    const newNote = document.createElement('div');
-    newNote.classList.add('falling-box');
-
-    const randomLane = Math.floor(Math.random() * 4); // Select a random lane
-    newNote.style.left = `${randomLane * (lane.offsetWidth + 20) + lane.offsetWidth / 2}px`; // Position note
-
-    trackContainer.appendChild(newNote); // Add note to the DOM
-
-    noteQueues[randomLane].push(newNote); // Add note to its queue
-
-    newNote.style.animation = 'fall 3s linear forwards'; // Set animation -- 3s to reach bottom
-    newNote.startTime = Date.now(); // Record start time
-
-    // Remove note if it falls without being hit
-    setTimeout(() => {
-        if (!document.body.contains(newNote)) return; // If note has already been removed, return
-        newNote.remove();
-        noteQueues[randomLane].shift(); // Remove from the queue
-        logContainer.style.color = 'red';
-        logMessage("Missed note");
-        perfectStreak = 0;
-    }, 3000);
-
-    // Schedule next note generation
-    const randomInterval = Math.random() * (intervalMax - intervalMin) + intervalMin;
-    setTimeout(generateFallingBox, randomInterval);
+function generateFallingBox(laneIndex) {
+    const fallingBox = document.createElement('div');
+    fallingBox.classList.add('falling-box');
+    fallingBox.style.top = '0px';
+    lanes[laneIndex].appendChild(fallingBox);
+    noteQueues[laneIndex].push(fallingBox);
+    fallingBox.startTime = Date.now(); // Record the note's start time
 }
 
-// Start the countdown to initiate the game
+// Update positions of falling boxes
+function updateFallingBoxes() {
+    noteQueues.forEach((queue, laneIndex) => {
+        queue.forEach((box, boxIndex) => {
+            const topPosition = parseInt(box.style.top);
+            box.style.top = `${topPosition + 5}px`; // Move the box down
+            if (topPosition > window.innerHeight) { // Remove if it reaches bottom
+                box.remove();
+                noteQueues[laneIndex].splice(boxIndex, 1);
+                logMessage("Missed note", 'red'); // Log missed note
+                perfectStreak = 0;
+            }
+        });
+    });
+}
+
+// Handle key press events for hitting notes
+document.addEventListener('keydown', (e) => {
+    const laneIndex = {'d': 0, 'f': 1, 'j': 2, 'k': 3}[e.key]; // Map keys to lanes
+    if (laneIndex !== undefined && noteQueues[laneIndex].length > 0) {
+        const note = noteQueues[laneIndex].shift(); // Get the note from the queue
+        const timeElapsed = Date.now() - note.startTime; // Calculate time since note started
+        note.remove(); // Remove the note from the DOM
+
+        // Determine note accuracy
+        if (Math.abs(timeElapsed - 2590) < 100) {
+            logMessage(`Perfect note x${++perfectStreak}`, 'gold');
+        } else if (Math.abs(timeElapsed - 2590) < 250) {
+            logMessage('Good note', 'green');
+            perfectStreak = 0;
+        } else {
+            logMessage('Offbeat note', 'purple');
+            perfectStreak = 0;
+        }
+    }
+});
+
+// Fetch beat info from the server and start generating notes
+function fetchBeatInfoAndStart() {
+    fetch('http://127.0.0.1:5000/beat-info')
+    .then(response => response.json())
+    .then(data => {
+        const beatTimes = data.beat_times;
+        if (beatTimes && beatTimes.length) {
+            beatTimes.forEach((beatTime) => {
+                const delay = beatTime * 1000;
+                setTimeout(() => {
+                    const laneIndex = Math.floor(Math.random() * 4);
+                    generateFallingBox(laneIndex);
+                }, delay);
+            });
+        } else {
+            console.error('No beat times received');
+        }
+    })
+    .catch(error => console.error('Error fetching beat info:', error));
+
+    // Continuously update the positions of falling boxes
+    setInterval(updateFallingBoxes, 50);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const countdownElement = document.getElementById('countdown');
+    const gameMusic = document.getElementById('gameMusic');
+
+    // Now it's safe to use gameMusic
+    if (gameMusic) {
+        startCountdown(); // Your game logic
+    } else {
+        console.error('Audio element with id "gameMusic" not found');
+    }
+});
+
+
+if (gameMusic) {
+    gameMusic.play();
+} else {
+    console.error('gameMusic element is null. Make sure the audio element exists in the DOM.');
+}
+
+
+// Start the countdown and initiate the game
 startCountdown();

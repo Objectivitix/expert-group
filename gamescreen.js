@@ -128,11 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-if (gameMusic) {
-    gameMusic.play();
-} else {
-    console.error('gameMusic element is null. Make sure the audio element exists in the DOM.');
-}
 
 
 // Start the countdown and initiate the game

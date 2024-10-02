@@ -155,6 +155,8 @@ h1 {
     z-index: 1;
 }
 
+
+
 .car-gif > img {
   width:500px;
   height:auto;
@@ -167,4 +169,20 @@ h1 {
 
 .gamecontainer{
   color:red;
+}
+
+
+@keyframes colorChange {
+  0% { color: red; }
+  20% { color: blue; }
+  40% { color: green; }
+  60% { color: purple; }
+  80% { color: orange; }
+  100% { color: red; }
+}
+
+
+h1 {
+  font-size: min(4rem, calc(5vw + 1rem));
+  animation: colorChange 5s infinite;
 }

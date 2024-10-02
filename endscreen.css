@@ -71,12 +71,14 @@ button {
 /* ACTUAL CODE (above was general config to look pretty) */
 
 body {
+
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 3rem;
+  background-image:url('resources/media/endpage.jpg');
 }
 
 /* Center song title */
@@ -140,4 +142,21 @@ h1 {
 
 .buttons > *:active {
   transform: translateY(2px);
+}
+
+
+
+@keyframes colorChange {
+  0% { color: red; }
+  20% { color: blue; }
+  40% { color: green; }
+  60% { color: purple; }
+  80% { color: orange; }
+  100% { color: red; }
+}
+
+
+h1 {
+  font-size: min(4rem, calc(5vw + 1rem));
+  animation: colorChange 5s infinite;
 }

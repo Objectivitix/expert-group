@@ -7,7 +7,15 @@ const logContainer = document.getElementById('log-container');
 const gameMusic = document.getElementById('gameMusic');
 let countdown = 3;
 let perfectStreak = 0;
+let updateInterval; // This will store the interval for updating falling boxes
 
+ let gameStats={
+        gold : 0,
+        green : 0,
+        purple : 0
+        }
+
+        
 // Constants for note intervals
 const intervalMin = 500;
 const intervalMax = 2000;
@@ -44,15 +52,39 @@ function startCountdown() {
     }); // Update countdown every 1000 ms
 }
 
-// Generate falling boxes (notes) in random lanes
+let noteCount = 0;
+const maxNotes = 15; // Set the limit for maximum number of notes
+
 function generateFallingBox(laneIndex) {
+    if (noteCount >= maxNotes) {
+        stopGame();
+        return; // Stop generating new notes
+    }
+
     const fallingBox = document.createElement('div');
     fallingBox.classList.add('falling-box');
     fallingBox.style.top = '0px';
     lanes[laneIndex].appendChild(fallingBox);
     noteQueues[laneIndex].push(fallingBox);
     fallingBox.startTime = Date.now(); // Record the note's start time
+
+    noteCount++; // Increment the note count
 }
+
+function stopGame() {
+    clearInterval(updateInterval); // Stop updating falling boxes
+    gameMusic.pause(); // Pause the music
+    gameMusic.currentTime = 0; // Reset the music to the beginning
+    localStorage.setItem('gameStats', JSON.stringify(gameStats));
+    showEndScreen(); // Show the end screen
+    
+}
+
+function showEndScreen() {
+    window.location.href = "endscreen.html"; // Redirect to the end screen
+}
+
+
 
 // Update positions of falling boxes
 function updateFallingBoxes() {
@@ -60,7 +92,7 @@ function updateFallingBoxes() {
         queue.forEach((box, boxIndex) => {
             const topPosition = parseInt(box.style.top);
             box.style.top = `${topPosition + 5}px`; // Move the box down
-            if (topPosition > window.innerHeight) { // Remove if it reaches bottom
+            if (topPosition >= lanes[laneIndex].offsetHeight - box.offsetHeight) { // Remove if it reaches bottom
                 box.remove();
                 noteQueues[laneIndex].splice(boxIndex, 1);
                 logMessage("Missed note", 'red'); // Log missed note
@@ -76,17 +108,21 @@ document.addEventListener('keydown', (e) => {
     if (laneIndex !== undefined && noteQueues[laneIndex].length > 0) {
         const note = noteQueues[laneIndex].shift(); // Get the note from the queue
         const timeElapsed = Date.now() - note.startTime; // Calculate time since note started
-        note.remove(); // Remove the note from the DOM
-
+        note.remove(); 
+        // Remove the note from the DOM
+       
         // Determine note accuracy
         if (Math.abs(timeElapsed - 2590) < 100) {
             logMessage(`Perfect note x${++perfectStreak}`, 'gold');
+            gameStats.gold++;
         } else if (Math.abs(timeElapsed - 2590) < 250) {
             logMessage('Good note', 'green');
             perfectStreak = 0;
+            gameStats.purple++;
         } else {
             logMessage('Offbeat note', 'purple');
             perfectStreak = 0;
+            gameStats.green++;
         }
     }
 });
@@ -111,17 +147,18 @@ function fetchBeatInfoAndStart() {
     })
     .catch(error => console.error('Error fetching beat info:', error));
 
-    // Continuously update the positions of falling boxes
-    setInterval(updateFallingBoxes, 50);
+    // Start updating the falling boxes and store the interval ID
+    updateInterval = setInterval(updateFallingBoxes, 20);
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const countdownElement = document.getElementById('countdown');
     const gameMusic = document.getElementById('gameMusic');
 
-    // Now it's safe to use gameMusic
+   
     if (gameMusic) {
-        startCountdown(); // Your game logic
+        startCountdown(); // Start the countdown
     } else {
         console.error('Audio element with id "gameMusic" not found');
     }

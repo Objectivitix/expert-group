@@ -75,6 +75,7 @@ button {
   font-family: Arial, sans-serif;
   font-size: 75px;
   position: relative;
+  color: white;
 }
 
 #game-container {
@@ -134,6 +135,7 @@ button {
   text-align: center;
   font-family: Arial, sans-serif;
   font-size: 50px;
+  color: white;
 }
 
 /* Adjusted animation to fall from top to bottom */
@@ -142,7 +144,7 @@ button {
     top: 0;
   }
   100% {
-    top: 90%; /* Adjust this depending on the height of the lanes */
+    top: 100%; /* Adjust this depending on the height of the lanes */
   }
 }
 
@@ -179,7 +181,7 @@ button {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  animation: fall 2.59s linear; /* Adjust duration based on beat timings */
+  animation: fall 2.89s linear; /* Adjust duration based on beat timings */
 }
 
 

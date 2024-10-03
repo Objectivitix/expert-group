@@ -5,7 +5,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS
 
-audio, sr = librosa.load('C:\\Users\\Sky\\expert-group\\resources\\BASXHKZIR_-_BASXHKZIR_-_Only_Alone.mp3')  # Update with the correct file path
+audio, sr = librosa.load('C:\\Users\\andre\\expert-group\\resources\\BASXHKZIR_-_BASXHKZIR_-_Only_Alone.mp3')  # Update with the correct file path
 tempo, beats = librosa.beat.beat_track(y=audio, sr=sr)
 beat_times = librosa.frames_to_time(beats, sr=sr)
 

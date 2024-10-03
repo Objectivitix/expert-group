@@ -3,20 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>You Completed the Song!</title>
+    <title>End Screen</title>
+    <link rel="stylesheet" href="endscreen.css"> 
     <script src="endscreen.js" defer></script> 
-    <link rel="stylesheet" href="endscreen.css">
 </head>
 <body>
-    <h1>Results</h1>
+    <h1>Game Over</h1>
+
+
     <div class="results">
-        <p class="percentage"></p> 
-        <p class="accuracy"></p> 
+        <p id="goldScore">Gold Notes: 0</p>
+        <p id="greenScore">Green Notes: 0</p>
+        <p id="purpleScore">Purple Notes: 0</p>
+        <div class="percentage" id="accuracy">Accuracy: 0%</div>
+        <div class="score" id="score">Score: 0</div>
     </div>
+
+
     <div class="buttons">
-        <button id="replay-button">Replay</button>
-        <a href="startscreen.html">Main Menu</a>
+        <button id="restartGameBtn">Restart Game</button>
+        <button id="mainMenuBtn">Main Menu</button>
+        <button id="saveScoreBtn">Save Score</button>
+        <button id="leaderboardBtn">Check Leaderboard</button>
     </div>
-    
+
+    <div class="fish-spin">
+        <img src="resources\fsh-spin.gif" alt="fish gif" style="width:100px;height:100px;">
+    </div>
+
+    <!-- Leaderboard Section -->
+    <h2>Leaderboard</h2>
+    <ul id="leaderboardList"></ul>  <!-- This list will be populated by the JS -->
 </body>
 </html>

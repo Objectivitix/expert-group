@@ -7,8 +7,9 @@ const logContainer = document.getElementById('log-container');
 const gameMusic = document.getElementById('gameMusic');
 let countdown = 3;
 let perfectStreak = 0;
-const maxNotes = 400;
+const maxNotes = 40;
 numOfNotes = 0;
+numbOfHits = 0;
 
 let updateInterval; // Declare the variable to store the interval ID
 
@@ -16,18 +17,24 @@ let gameStats = {
     score: 0,
     accuracy: 0,
     percentage: 0,
+    gold: 0,
+    green: 0,
+    purple: 0
 };
 
-// TODO: explain what this is
-const countdownMusicOffset = 2590;
-
+// An incredibly important constant. The time it takes for
+// a note to fall from its spawn point to the hit indicator.
+// Used to offset music playback and rate hits.
+const fallToIndicatorTime = 2590;
 
 // Constants for note intervals
 const intervalMin = 500;
 const intervalMax = 2000;
 
 // Note queues for each lane
-const noteQueues = [[], [], [], []]; 
+const noteQueues = [[], [], [], []];
+// What song the user picked
+let songIndex;
 
 // HUMAN-DESIGNED LEVELS -- Mapped using an array of beats,
 // an array of corresponding notes (expressed as lanes on
@@ -175,8 +182,17 @@ function startCountdown() {
             countdownElement.textContent = 'Start!'; // Display "Start!" at 0
             setTimeout(() => {
                 countdownElement.style.display = 'none'; // Hide countdown after 1 second
-                setTimeout(() => gameMusic.play(), countdownMusicOffset); // Start the music after the countdown
-                startWithPrebuiltLevel(fingerdash); // Start the game after music starts
+                    // Start the music after the countdown, making sure the first notes have time to fall
+                    setTimeout(() => gameMusic.play(), fallToIndicatorTime);
+                    // Start the game depending on if it's a human-designed level
+                    songIndex = new URLSearchParams(window.location.search).get("songIndex");
+                    if (songIndex == 0 || songIndex == 1) {
+                        startWithPrebuiltLevel(fingerdash);
+                    } else {
+                        fetchBeatInfoAndStart();
+                        gameMusic.src = "./resources/only-alone.mp3";
+                    }
+            
             }, 1000); // Wait 1 second before hiding countdown and starting music
         } else {
             clearInterval(interval); // Stop the countdown after it reaches 0
@@ -185,9 +201,7 @@ function startCountdown() {
 }
 
 function generateFallingBox(laneIndex) {
-    if (numOfNotes >= maxNotes){
-        stopGame();
-    }
+
     const fallingBox = document.createElement('div');
     fallingBox.classList.add('falling-box');
     lanes[laneIndex].appendChild(fallingBox);
@@ -207,23 +221,45 @@ function generateFallingBox(laneIndex) {
     }, 3000); // Matches the 3-second animation duration
     console.log(numOfNotes);
     numOfNotes ++ ;
+
 }
 
 // Update positions of falling boxes
 function updateFallingBoxes() {
+    let allQueuesEmpty = true;
+    if(numOfNotes >= maxNotes) {
+        stopGame();
+        return;
+    }
     noteQueues.forEach((queue, laneIndex) => {
-        queue.forEach((box, boxIndex) => {
+        console.log(`Lane ${laneIndex} Queue:`, queue.length);  // Log the length of each queue
+
+        for (let boxIndex = queue.length - 1; boxIndex >= 0; boxIndex--) {
+            const box = queue[boxIndex];
             const topPosition = parseInt(box.style.top);
-            box.style.top = `${topPosition + 5}px`; // Move the box down
-            if (topPosition > window.innerHeight) { // Remove if it reaches bottom
+            box.style.top = `${topPosition + 5}px`;
+
+            if (topPosition > window.innerHeight) {
                 box.remove();
-                noteQueues[laneIndex].splice(boxIndex, 1);
-                logMessage("Missed note", 'red'); // Log missed note
+                queue.splice(boxIndex, 1);
+                logMessage("Missed note", 'red');
                 perfectStreak = 0;
             }
-        });
+        }
+
+        if (queue.length > 0) {
+            allQueuesEmpty = false;
+        }
     });
+
+    console.log("All queues empty:", allQueuesEmpty); // Log whether all queues are empty
+
+    if (allQueuesEmpty && numOfNotes >= maxNotes) {
+        console.log("Stopping game, no notes left on screen.");
+        stopGame();
+    }
 }
+
 
 // Handle key press events for hitting notes
 document.addEventListener('keydown', (e) => {
@@ -232,18 +268,23 @@ document.addEventListener('keydown', (e) => {
         const note = noteQueues[laneIndex].shift(); // Get the note from the queue
         const timeElapsed = Date.now() - note.startTime; // Calculate time since note started
         note.remove(); // Remove the note from the DOM
-
+        numbOfHits++;
         // Determine note accuracy
-        if (Math.abs(timeElapsed - 2590) < 100) {
+        if (Math.abs(timeElapsed - fallToIndicatorTime) < 100) {
             logMessage(`Perfect note x${++perfectStreak}`, 'gold');
             gameStats.score += 100; // Update score for perfect hit
-        } else if (Math.abs(timeElapsed - 2590) < 250) {
+            gameStats.gold++;
+        } else if (Math.abs(timeElapsed - fallToIndicatorTime) < 250) {
             logMessage('Good note', 'green');
+            gameStats.score += 75; // Update score for good hit
             gameStats.score += 50; // Update score for good hit
+            gameStats.green++;
             perfectStreak = 0;
         } else {
             logMessage('Offbeat note', 'purple');
+            gameStats.score += 25; // Update score for offbeat hit
             perfectStreak = 0;
+            gameStats.purple++;
         }
 
         // Optionally update accuracy and percentage
@@ -330,10 +371,22 @@ function stopGame() {
     gameMusic.pause(); // Pause the music
     gameMusic.currentTime = 0; // Reset the music to the beginning
 
-    // Store game statistics in localStorage
-    localStorage.setItem('gameStats', JSON.stringify(gameStats));
+    const totalHits = gameStats.gold + gameStats.purple + gameStats.green; // All notes hit or missed
+    const totalNotes = numOfNotes; // Total number of notes generated
 
-    // Redirect to the end screen immediately
-    window.location.href = "endscreen.html"; // Redirect to the end screen
+    // Calculate accuracy as percentage
+    const accuracy = ((totalHits / totalNotes) * 100).toFixed(2);
+
+
+
+    localStorage.setItem('gameStats', JSON.stringify({
+        gold: gameStats.gold,
+        purple: gameStats.purple,
+        green: gameStats.green,
+        accuracy: accuracy,
+        score: gameStats.score
+    }));
+
+    // Redirect to end screen, again storing info about the current song
+    window.location.href = `endscreen.html?songIndex=${songIndex}`;
 }
-

@@ -109,7 +109,19 @@ h1 {
   align-items: center;
   box-shadow: var(--shadow);
 }
-
+.score{
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--accent);
+  background-color: hsl(0, 0%, 96%);
+  border-radius: 50%;
+  width: 9rem;
+  height: 9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--shadow);
+}
 /* Accuracy text */
 .accuracy {
   text-transform: uppercase;
@@ -160,3 +172,25 @@ h1 {
   font-size: min(4rem, calc(5vw + 1rem));
   animation: colorChange 5s infinite;
 }
+
+
+/* Leaderboard styling */
+h2 {
+  font-size: var(--fs-700);  
+  color: var(--primary);    
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#leaderboardList {
+  max-width: 600px;
+  margin: 0 auto;  
+  padding: 0;
+  list-style-type: none;  /* Remove bullet points from list */
+  background-color: hsl(0, 0%, 96%);  /* Light background for contrast */
+  border-radius: 10px;
+  box-shadow: var(--shadow);  /* Add a subtle shadow for depth */
+  padding: 20px;
+}
+
+

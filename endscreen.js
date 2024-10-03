@@ -5,15 +5,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Display the game stats on the end screen
     if (gameStats) {
-        document.getElementById('goldScore').textContent = `Gold Notes: ${gameStats.gold}`;
-        document.getElementById('greenScore').textContent = `Green Notes: ${gameStats.green}`;
-        document.getElementById('purpleScore').textContent = `Purple Notes: ${gameStats.purple}`;
+       
         document.getElementById('accuracy').textContent = `Accuracy: ${gameStats.accuracy}%`;
         document.getElementById('score').textContent = `Score: ${gameStats.score}`;
+    } else {
+        console.error('No game statistics found in localStorage');
     }
 
     // Restart game 
-    document.getElementById('restartGameBtn').addEventListener('click', () => {window.location.href = `gamescreen.html`;});
+    document.getElementById('restartGameBtn').addEventListener('click', () => {window.location.href = "gamescreen.html";});
 
     // Go back to main menu
     document.getElementById('mainMenuBtn').addEventListener('click', () => {window.location.href = "index.html";});
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Loop through each leaderboard entry and display it
                 data.forEach((entry, index) => {
                     const li = document.createElement('li');
-                    li.textContent = `#${index + 1}: ${entry.username} - Gold: ${entry.gold}, Green: ${entry.green}, Purple: ${entry.purple}, Accuracy: ${entry.accuracy}%`;
+                    li.textContent = `${index + 1}: ${entry.username} - Score: ${entry.score}Accuracy: ${entry.accuracy}%`;
                     leaderboardList.appendChild(li);
                 });
             })
@@ -76,6 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     });
     
+
+
+
 
 
 })

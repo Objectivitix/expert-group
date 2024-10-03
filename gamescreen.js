@@ -193,6 +193,17 @@ function startCountdown() {
                         gameMusic.src = "./resources/only-alone.mp3";
                     }
             
+                // Start the music after the countdown, making sure the first notes have time to fall
+                setTimeout(() => gameMusic.play(), fallToIndicatorTime);
+
+                // Start the game depending on if it's a human-designed level
+                songIndex = new URLSearchParams(window.location.search).get("songIndex");
+                if (songIndex == 0 || songIndex == 1) {
+                    startWithPrebuiltLevel(fingerdash);
+                } else {
+                    fetchBeatInfoAndStart();
+                    gameMusic.src = "./resources/only-alone.mp3";
+                }
             }, 1000); // Wait 1 second before hiding countdown and starting music
         } else {
             clearInterval(interval); // Stop the countdown after it reaches 0
@@ -227,10 +238,12 @@ function generateFallingBox(laneIndex) {
 // Update positions of falling boxes
 function updateFallingBoxes() {
     let allQueuesEmpty = true;
+    /*testing code
     if(numOfNotes >= maxNotes) {
         stopGame();
         return;
     }
+    */
     noteQueues.forEach((queue, laneIndex) => {
         console.log(`Lane ${laneIndex} Queue:`, queue.length);  // Log the length of each queue
 
@@ -274,6 +287,7 @@ document.addEventListener('keydown', (e) => {
             logMessage(`Perfect note x${++perfectStreak}`, 'gold');
             gameStats.score += 100; // Update score for perfect hit
             gameStats.gold++;
+        } else if (Math.abs(timeElapsed - fallToIndicatorTime) < 250) {
         } else if (Math.abs(timeElapsed - fallToIndicatorTime) < 250) {
             logMessage('Good note', 'green');
             gameStats.score += 75; // Update score for good hit
@@ -390,3 +404,4 @@ function stopGame() {
     // Redirect to end screen, again storing info about the current song
     window.location.href = `endscreen.html?songIndex=${songIndex}`;
 }
+    

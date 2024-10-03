@@ -174,8 +174,8 @@ button {
 
 
 .falling-box {
-  width: 80px;
-  height: 10px;
+  width: 90px;
+  height: 25px;
   background-color: var(--accent);
   position: absolute;
   top: 0;

@@ -7,7 +7,7 @@ const trackContainer = document.getElementById('track-container');
 const lanes = document.querySelectorAll('.lane');
 const logContainer = document.getElementById('log-container');
 const gameMusic = document.getElementById('gameMusic');
-let countdown = 3;
+let countdown = 1;
 let perfectStreak = 0;
 let numOfNotes = 0;
 
@@ -162,7 +162,7 @@ function fetchBeatInfoAndStart() {
         .then(data => {
             const beatTimes = data.beat_times;
             if (beatTimes && beatTimes.length) {
-                whereTheyreDropping = [];
+                const whereTheyreDropping = [];
 
                 for (let i = 0; i < beatTimes.length; i++) {
                     whereTheyreDropping.push([Math.floor(Math.random() * 4)]);

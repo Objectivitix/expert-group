@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const gameStats = JSON.parse(localStorage.getItem('gameStats'));
+    const songIndex = new URLSearchParams(window.location.search).get("songIndex");
 
     if (gameStats) {
         document.querySelector('.percentage').textContent = `${gameStats.perfectNotes} Perfect Notes`;
@@ -10,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('replay-button').addEventListener('click', () => {
         // Clear game stats from local storage
         localStorage.removeItem('gameStats');
-        
+
         // Redirect to the game start screen or directly to the game
-        window.location.href = "gamescreen.html"; // Update this to your actual game screen URL
+        window.location.href = `gamescreen.html?songIndex=${songIndex}`;
     });
 });

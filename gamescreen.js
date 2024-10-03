@@ -9,7 +9,6 @@ const logContainer = document.getElementById('log-container');
 const gameMusic = document.getElementById('gameMusic');
 let countdown = 3;
 let perfectStreak = 0;
-const maxNotes = 40;
 let numOfNotes = 0;
 
 let updateInterval; // Declare the variable to store the interval ID
@@ -92,9 +91,6 @@ function startCountdown() {
 }
 
 function generateFallingBox(laneIndex) {
-    if (numOfNotes >= maxNotes){
-        stopGame();
-    }
     const fallingBox = document.createElement('div');
     fallingBox.classList.add('falling-box');
     lanes[laneIndex].appendChild(fallingBox);
@@ -206,6 +202,8 @@ function scheduleFallingBoxes(beatTimes, whereTheyreDropping) {
     // Continuously update the positions of falling boxes
     // (Also store the interval ID in updateInterval)
     updateInterval = setInterval(updateFallingBoxes, 10);
+
+    setTimeout(() => stopGame(), beatTimes[beatTimes.length - 1] + fallToIndicatorTime);
 }
 
 // Convenience function for "zipping" up arrays.

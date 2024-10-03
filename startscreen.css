@@ -56,6 +56,16 @@ body {
   font-family: var(--roboto);
   font-size: var(--fs-400);
   color: var(--text);
+  background-image: url('resources/media/background.jpg');
+  backdrop-filter: brightness(0.4);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
 }
 
 h1 { font-size: var(--fs-800); }
@@ -70,36 +80,29 @@ button {
 
 /* ACTUAL CODE (above was general config to look pretty) */
 
-body{
-    background-image:url('resources/media/background.jpg');
-    backdrop-filter: brightness(0.4);
-    background-repeat:no-repeat;
-    background-attachment:fixed;
-    background-size:cover;
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-}
-
 h1 {
     font-size: min(4rem, calc(5vw + 1rem));
     color: var(--primary);
+    margin-top: 100px;
+    animation: colorChange 5s infinite; 
 }
 
 .instructions {
     text-transform: uppercase;
     letter-spacing: 0.4ch;
     font-size: 2rem;
+    margin: 60px 0;
+    /*
     margin-top: 4px;
     margin-bottom: 5rem;
+    */
 }
 
 .song-menu {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    margin-top: 20px;
   }
   
   .song-menu > button {
@@ -126,19 +129,19 @@ h1 {
   }
 
 .gif-container{
-    position:absolute;
-    bottom:20px;
-    width:calc(100%-40px);
-    filter: brightness(0.4);
+  display: flex;
+  justify-content: flex-start; 
+  align-items: flex-start; 
+  width: calc(100% - 40px);
+  height: 100vh;
+  justify-content: space-between;
 }
 
 .music-gif{
     position: absolute;
-    bottom:70px;
-    left:250px;
-    transform: translateY(-50%);    
-    width: 20%; 
-    height: auto;
+    bottom:300px;
+    right:20px;
+    width: auto; 
 
 }
 
@@ -149,22 +152,30 @@ h1 {
 
 .car-gif {
     position: absolute;
-    bottom: 0;
-    left: 250px;
-    transform: translateY(-50%);
+    bottom: 100px;
+    right: 20px;
+    
     z-index: 1;
 }
 
-
-
 .car-gif > img {
-  width:500px;
-  height:auto;
+  width: 500px;
+  height: auto; 
 }
 
-.gif{
-    width: 100px;
-    height:auto;
+.lightning-gif {
+    position: absolute; 
+    top: 0; 
+    left: 0;
+    width: 150px;
+    height: auto; 
+    z-index: 1;
+}
+
+.lightning-gif > img {
+    width: 200px;
+    height: auto;
+    margin-top: 10px; 
 }
 
 .gamecontainer{
@@ -179,10 +190,4 @@ h1 {
   60% { color: purple; }
   80% { color: orange; }
   100% { color: red; }
-}
-
-
-h1 {
-  font-size: min(4rem, calc(5vw + 1rem));
-  animation: colorChange 5s infinite;
 }

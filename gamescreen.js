@@ -193,19 +193,29 @@ function startWithPrebuiltLevel(level) {
 }
 
 function scheduleFallingBoxes(beatTimes, whereTheyreDropping) {
+    // We'll increment this variable as we iterate through
+    // whereTheyreDropping so we know how many notes there
+    // are in this song (for stats calculations later)
+    let totalNotes = 0;
+
     zip(beatTimes, whereTheyreDropping).forEach(([beatTime, laneIndices]) => {
         laneIndices.forEach(laneIndex => {
             setTimeout(() => {
                 generateFallingBox(laneIndex);
             }, beatTime);
         });
+
+        totalNotes += laneIndices.length;
     });
 
     // Continuously update the positions of falling boxes
     // (Also store the interval ID in updateInterval)
     updateInterval = setInterval(updateFallingBoxes, 10);
 
-    setTimeout(() => stopGame(), beatTimes[beatTimes.length - 1] + fallToIndicatorTime);
+    setTimeout(
+        () => stopGame(totalNotes),
+        beatTimes[1] + fallToIndicatorTime * 2
+    );
 }
 
 // Convenience function for "zipping" up arrays.
@@ -233,16 +243,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function stopGame() {
+function stopGame(totalNotes) {
     clearInterval(updateInterval); // Stop updating falling boxes
     gameMusic.pause(); // Pause the music
     gameMusic.currentTime = 0; // Reset the music to the beginning
     
-    gameStats.accuracy = ((totalHits / maxNotes) * 100).toFixed(2);
+    gameStats.accuracy = ((totalHits / totalNotes) * 100).toFixed(2);
 
     // Store game statistics in localStorage
-    localStorage.setItem('gameStats', JSON.stringify(gameStats
-    ));
+    localStorage.setItem('gameStats', JSON.stringify(gameStats));
 
     // Redirect to end screen, again storing info about the current song
     window.location.href = `endscreen.html?songIndex=${songIndex}`;

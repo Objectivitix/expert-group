@@ -96,6 +96,7 @@ body {
   align-items: center;
   gap: 3rem;
   background-image:url('resources/media/endpage.jpg');
+  backdrop-filter: brightness(0.4);
 }
 
 

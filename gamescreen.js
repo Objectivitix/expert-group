@@ -214,7 +214,7 @@ function scheduleFallingBoxes(beatTimes, whereTheyreDropping) {
 
     setTimeout(
         () => stopGame(totalNotes),
-        beatTimes[1] + fallToIndicatorTime * 2
+        beatTimes[beatTimes.length - 1] + fallToIndicatorTime * 2
     );
 }
 

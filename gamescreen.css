@@ -252,7 +252,7 @@ transition: .3s;
 box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
-
+/* Light effect styles */
 .light {
   position: absolute;
   width: 0px;
@@ -269,6 +269,7 @@ box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 
 
 .x1{
+/* Floating animations for light effects */
 -webkit-animation: floatUp 4s infinite linear;
 -moz-animation: floatUp 4s infinite linear;
 -o-animation: floatUp 4s infinite linear;

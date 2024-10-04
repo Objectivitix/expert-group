@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pattern Game</title>
+    <link rel="stylesheet" href="pattern.css">
+    <script src="pattern.js" defer></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1>Pattern Game</h1>
+      <div id="game-container">
+        <canvas id="gameCanvas" width="300" height="300"></canvas>
+        <canvas id="patternCanvas" width="300" height="300"></canvas>
+      </div>
+      <button id="startButton" aria-label="Start the game">Start Game</button>
+      <button id="completeButton" aria-label="Complete the current round">
+        Complete
+      </button>
+      <p id="message"></p>
+      <p>Round: <span id="roundCounter">1</span>/5</p>
+      <p>Score: <span id="scoreCounter">0</span></p>
+    </div>
+  </body>
+</html>

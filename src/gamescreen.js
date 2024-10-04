@@ -83,7 +83,7 @@ function startCountdown() {
         );
         if (songIndex == -1) {
           fetchBeatInfoAndStart();
-          gameMusic.src = "./resources/only-alone.mp3";
+          gameMusic.src = "../resources/songs/only-alone.mp3";
         } else {
           startWithPrebuiltLevel(LEVELS[songIndex]);
         }
@@ -222,7 +222,7 @@ function scheduleFallingBoxes(beatTimes, whereTheyreDropping) {
 
   setTimeout(
     () => stopGame(totalNotes),
-    beatTimes[beatTimes.length - 1] + fallToIndicatorTime * 2,
+    beatTimes[1] + fallToIndicatorTime * 2,
   );
 }
 

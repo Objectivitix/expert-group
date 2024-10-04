@@ -87,7 +87,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 3rem;
-  background-image: url("resources/media/endpage.jpg");
+  background-image: url("../resources/visuals/end-bg.jpg");
   backdrop-filter: brightness(0.4);
 }
 

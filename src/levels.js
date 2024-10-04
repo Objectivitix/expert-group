@@ -106,7 +106,7 @@ export const LEVELS = [
       // aaaand we stop at big beat drop
       [0, 1, 2, 3], [2],
     ],
-    src: "./resources/fingerdash.m4a",
+    src: "../resources/songs/fingerdash.m4a",
     bpm: 112, offset: 230, testingStartAtBeat: 0,
   },
   { // Seven Nation Army
@@ -178,7 +178,7 @@ export const LEVELS = [
       [1, 3], [0], [1], [0], [2],
       [3], [1],
     ],
-    src: "./resources/seven-nation-army.m4a",
+    src: "../resources/songs/seven-nation-army.m4a",
     bpm: 120, offset: 1600, testingStartAtBeat: 0,
   }
 ]

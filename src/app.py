@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS
 
 
-audio, sr = librosa.load('./resources/only-alone.mp3')
+audio, sr = librosa.load('../resources/songs/only-alone.mp3')
 
 
 tempo, beats = librosa.beat.beat_track(y=audio, sr=sr)

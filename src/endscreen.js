@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Go back to main menu
   document.getElementById("mainMenuBtn").addEventListener("click", () => {
-    window.location.href = `startscreen.html`;
+    window.location.href = `index.html`;
   });
 
   // Save score

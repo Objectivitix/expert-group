@@ -10,6 +10,7 @@ const gameMusic = document.getElementById('gameMusic');
 let countdown = 1;
 let perfectStreak = 0;
 let numOfNotes = 0;
+let totalHits = 0;
 
 let updateInterval; // Declare the variable to store the interval ID
 
@@ -17,6 +18,7 @@ let gameStats = {
     score: 0,
     accuracy: 0,
     percentage: 0,
+    accuracy: 0,
 };
 
 // An incredibly important constant. The time it takes for
@@ -135,7 +137,7 @@ document.addEventListener('keydown', (e) => {
         const note = noteQueues[laneIndex].shift(); // Get the note from the queue
         const timeElapsed = Date.now() - note.startTime; // Calculate time since note started
         note.remove(); // Remove the note from the DOM
-
+        totalHits++;
         // Determine note accuracy
         if (Math.abs(timeElapsed - fallToIndicatorTime) < 100) {
             logMessage(`Perfect note x${++perfectStreak}`, 'gold');
@@ -235,9 +237,12 @@ function stopGame() {
     clearInterval(updateInterval); // Stop updating falling boxes
     gameMusic.pause(); // Pause the music
     gameMusic.currentTime = 0; // Reset the music to the beginning
+    
+    gameStats.accuracy = ((totalHits / maxNotes) * 100).toFixed(2);
 
     // Store game statistics in localStorage
-    localStorage.setItem('gameStats', JSON.stringify(gameStats));
+    localStorage.setItem('gameStats', JSON.stringify(gameStats
+    ));
 
     // Redirect to end screen, again storing info about the current song
     window.location.href = `endscreen.html?songIndex=${songIndex}`;

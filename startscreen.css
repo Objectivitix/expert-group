@@ -43,7 +43,7 @@ input {
 
   --primary: hsl(298, 89%, 45%);
   --accent: hsl(19, 96%, 56%);
-  --text: hsl(0, 85%, 45%);
+  --text: hsl(0, 0%, 95%);
 
   --shadow: 2px 4px 8px -3px hsl(0 0% 0% / 25%);
 
@@ -87,15 +87,16 @@ h1 {
     animation: colorChange 5s infinite; 
 }
 
+.logo {
+  width: min(80vw, 60rem);
+}
+
 .instructions {
     text-transform: uppercase;
     letter-spacing: 0.4ch;
-    font-size: 2rem;
-    margin: 60px 0;
-    /*
-    margin-top: 4px;
-    margin-bottom: 5rem;
-    */
+    font-size: 2.25rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
 }
 
 .song-menu {
@@ -177,11 +178,6 @@ h1 {
     height: auto;
     margin-top: 10px; 
 }
-
-.gamecontainer{
-  color:red;
-}
-
 
 @keyframes colorChange {
   0% { color: red; }

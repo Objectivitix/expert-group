@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const gameStats = JSON.parse(localStorage.getItem("gameStats"));
+
     if (gameStats) {
       fetch("http://127.0.0.1:5000/save_score", {
         method: "POST",

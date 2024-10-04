@@ -3,21 +3,22 @@ import { LEVELS } from "./levels.js";
 // Get DOM elements
 const countdownElement = document.getElementById("countdown");
 const gameContainer = document.getElementById("game-container");
-const trackContainer = document.getElementById("track-container");
 const lanes = document.querySelectorAll(".lane");
 const logContainer = document.getElementById("log-container");
 const gameMusic = document.getElementById("gameMusic");
+
+// Variables tracking game state
 let countdown = 1;
 let perfectStreak = 0;
 let numOfNotes = 0;
 let totalHits = 0;
 
-let updateInterval; // Declare the variable to store the interval ID
+// Necessary to store update interval ID when we
+// create it so we can access and modify it later
+let updateInterval;
 
 let gameStats = {
   score: 0,
-  accuracy: 0,
-  percentage: 0,
   accuracy: 0,
 };
 
@@ -26,17 +27,15 @@ let gameStats = {
 // Used to offset music playback and rate hits.
 const fallToIndicatorTime = 2590;
 
-// Constants for note intervals
-const intervalMin = 500;
-const intervalMax = 2000;
-
 // Note queues for each lane
 const noteQueues = [[], [], [], []];
 
 // What song the user picked
 let songIndex;
 
-let newIndicatorPx = calculateIndicatorPx(); // Initialize based on current height
+// Initialize based on current height, used
+// to offset position of notes later on
+let newIndicatorPx = calculateIndicatorPx();
 
 // Utility function to log messages to the right-side log container
 function logMessage(message, color = "black") {
@@ -112,6 +111,7 @@ function generateFallingBox(laneIndex) {
       perfectStreak = 0;
     }
   }, 3000); // Matches the 3-second animation duration
+
   console.log(numOfNotes);
   numOfNotes++;
 }
@@ -122,6 +122,7 @@ function updateFallingBoxes() {
     queue.forEach((box, boxIndex) => {
       const topPosition = parseInt(box.style.top);
       box.style.top = `${topPosition + 5}px`; // Move the box down
+
       if (topPosition > window.innerHeight) {
         // Remove if it reaches bottom
         box.remove();
@@ -140,7 +141,9 @@ document.addEventListener("keydown", (e) => {
     const note = noteQueues[laneIndex].shift(); // Get the note from the queue
     const timeElapsed = Date.now() - note.startTime; // Calculate time since note started
     note.remove(); // Remove the note from the DOM
+
     totalHits++;
+
     // Determine note accuracy
     if (Math.abs(timeElapsed - fallToIndicatorTime) < 100) {
       logMessage(`Perfect note x${++perfectStreak}`, "gold");
@@ -153,28 +156,29 @@ document.addEventListener("keydown", (e) => {
       logMessage("Offbeat note", "purple");
       perfectStreak = 0;
     }
-
-    // Optionally update accuracy and percentage
-    gameStats.accuracy = (perfectStreak / numOfNotes) * 100; // Example accuracy calculation
-    gameStats.percentage = (gameStats.score / (numOfNotes * 100)) * 100; // Example percentage calculation
   }
 });
 
-// Fetch beat info from the server and start generating notes
+// AI-GENERATED LEVEL -- Song is processed and segmented server-side.
+// We fetch these beat times from the API we made available and start
+// generating notes.
 function fetchBeatInfoAndStart() {
   fetch("http://127.0.0.1:5000/beat-info")
     .then((response) => response.json())
     .then((data) => {
       const beatTimes = data.beat_times;
-      if (beatTimes && beatTimes.length) {
-        const whereTheyreDropping = [];
 
+      if (beatTimes && beatTimes.length) {
+        // Generate random lane indices for each beat
+        const whereTheyreDropping = [];
         for (let i = 0; i < beatTimes.length; i++) {
           whereTheyreDropping.push([Math.floor(Math.random() * 4)]);
         }
 
         scheduleFallingBoxes(beatTimes, whereTheyreDropping);
-      } else {
+      }
+
+      else {
         console.error("No beat times received");
       }
     })
@@ -182,8 +186,13 @@ function fetchBeatInfoAndStart() {
 }
 
 function startWithPrebuiltLevel(level) {
+  // Conversion from bpm to mspb is derived as follows:
+  //   x beats     1 min       1 s                 60000 ms
+  // ( -------  *  -----  *  ------- ) ^ -1   ==   --------
+  //    1 min      60 s      1000 ms               x beats
   const msPerBeat = 60000 / level.bpm;
 
+  // Shift notes early-ward based on start beat (for testing)
   const testingStartIndex = level.beats.indexOf(level.testingStartAtBeat);
   level.beats = level.beats
     .slice(testingStartIndex)
@@ -191,9 +200,11 @@ function startWithPrebuiltLevel(level) {
   level.whereTheyreDropping =
     level.whereTheyreDropping.slice(testingStartIndex);
 
+  // Switch to correct song and adjust music for testing
   gameMusic.src = level.src;
   gameMusic.currentTime = (level.testingStartAtBeat * 60) / level.bpm;
 
+  // Convert beats to beat-times, then schedule the notes
   scheduleFallingBoxes(
     level.beats.map((beat) => beat * msPerBeat + level.offset),
     level.whereTheyreDropping,
@@ -206,6 +217,9 @@ function scheduleFallingBoxes(beatTimes, whereTheyreDropping) {
   // are in this song (for stats calculations later)
   let totalNotes = 0;
 
+  // Iterate through beat times and lane arrays in parallel,
+  // since each beat time corresponds to an array of lane indices
+  // where notes should drop
   zip(beatTimes, whereTheyreDropping).forEach(([beatTime, laneIndices]) => {
     laneIndices.forEach((laneIndex) => {
       setTimeout(() => {
@@ -220,9 +234,10 @@ function scheduleFallingBoxes(beatTimes, whereTheyreDropping) {
   // (Also store the interval ID in updateInterval)
   updateInterval = setInterval(updateFallingBoxes, 10);
 
+  // Schedule game to stop a bit after the last note plays
   setTimeout(
     () => stopGame(totalNotes),
-    beatTimes[1] + fallToIndicatorTime * 2,
+    beatTimes[beatTimes.length - 1] + fallToIndicatorTime * 2,
   );
 }
 
@@ -241,12 +256,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (gameMusic) {
     startCountdown(); // Your game logic
 
-    // resizeObserver for if screen res changes
+    // If screen resolution changes, query the new indicator
+    // margins so note position offset still works
     const resizeObserver = new ResizeObserver(() => {
       updateIndicatorMargins();
     });
     resizeObserver.observe(gameContainer);
-  } else {
+  }
+  
+  else {
     console.error('Audio element with id "gameMusic" not found');
   }
 });

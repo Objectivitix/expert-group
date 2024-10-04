@@ -12,15 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const points = [
     //define points on the grid
-    { x: 50, y: 50 },
-    { x: 150, y: 50 },
-    { x: 250, y: 50 },
-    { x: 50, y: 150 },
-    { x: 150, y: 150 },
-    { x: 250, y: 150 },
-    { x: 50, y: 250 },
-    { x: 150, y: 250 },
-    { x: 250, y: 250 },
+    { x: 50, y: 50 }, { x: 150, y: 50 }, { x: 250, y: 50 },
+    { x: 50, y: 150 }, { x: 150, y: 150 }, { x: 250, y: 150 },
+    { x: 50, y: 250 }, { x: 150, y: 250 }, { x: 250, y: 250 },
   ];
 
   const patterns = [
@@ -41,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //function to draw grid of points on canvas
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.fillStyle = "white";
+
     points.forEach((point) => {
       ctx.beginPath();
       ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);
@@ -52,7 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
     //function to draw specified pattern on canvas
     ctx.strokeStyle = color;
     ctx.lineWidth = 4;
+
     ctx.beginPath();
+
     pattern.forEach((index, i) => {
       if (i === 0) {
         ctx.moveTo(points[index].x, points[index].y);
@@ -60,14 +57,17 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.lineTo(points[index].x, points[index].y);
       }
     });
+
     ctx.stroke();
   }
 
   function startGame() {
     currentRound = 0; //reset current round
     score = 0; //reset score
+
     roundCounter.textContent = currentRound + 1; //update round count
     scoreCounter.textContent = score; //update score
+
     nextRound(); //moving on to next round
   }
 
@@ -75,9 +75,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentRound < patterns.length) {
       userInput = []; //clear previous userinput
       currentPattern = patterns[currentRound];
+
       drawGrid(gameCtx);
       drawGrid(patternCtx);
       drawPattern(patternCtx, currentPattern, "red");
+
       message.textContent = `Round ${currentRound + 1}: Draw the pattern!`;
       completeButton.style.display = "block";
     } else {

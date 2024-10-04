@@ -33,12 +33,12 @@ input {
 :root {
   /* --roboto: "Roboto", sans-serif; */
 
-  --fs-900: 2.250rem;
+  --fs-900: 2.25rem;
   --fs-800: 1.875rem;
-  --fs-700: 1.500rem;
-  --fs-600: 1.250rem;
+  --fs-700: 1.5rem;
+  --fs-600: 1.25rem;
   --fs-500: 1.125rem;
-  --fs-400: 1.000rem;
+  --fs-400: 1rem;
   --fs-300: 0.875rem;
 
   --primary: hsl(298, 89%, 45%);
@@ -56,7 +56,7 @@ body {
   font-family: var(--roboto);
   font-size: var(--fs-400);
   color: var(--text);
-  background-image: url('resources/media/background.jpg');
+  background-image: url("resources/media/background.jpg");
   backdrop-filter: brightness(0.4);
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -64,15 +64,25 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
 }
 
-h1 { font-size: var(--fs-800); }
-h2 { font-size: var(--fs-700); }
-h3 { font-size: var(--fs-600); }
-h4 { font-size: var(--fs-500); }
-h5 { font-size: var(--fs-400); }
+h1 {
+  font-size: var(--fs-800);
+}
+h2 {
+  font-size: var(--fs-700);
+}
+h3 {
+  font-size: var(--fs-600);
+}
+h4 {
+  font-size: var(--fs-500);
+}
+h5 {
+  font-size: var(--fs-400);
+}
 
 button {
   cursor: pointer;
@@ -81,10 +91,10 @@ button {
 /* ACTUAL CODE (above was general config to look pretty) */
 
 h1 {
-    font-size: min(4rem, calc(5vw + 1rem));
-    color: var(--primary);
-    margin-top: 100px;
-    animation: colorChange 5s infinite; 
+  font-size: min(4rem, calc(5vw + 1rem));
+  color: var(--primary);
+  margin-top: 100px;
+  animation: colorChange 5s infinite;
 }
 
 .logo {
@@ -92,97 +102,110 @@ h1 {
 }
 
 .instructions {
-    text-transform: uppercase;
-    letter-spacing: 0.4ch;
-    font-size: 2.25rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4ch;
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
 }
 
 .song-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    margin-top: 20px;
-  }
-  
-  .song-menu > button {
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    background-size: 200%; /* Expand the background size */
-    background-position: left; /* Start position for the gradient */
-    border: none;
-    border-radius: 60px;
-    padding: 1.5rem 2rem;
-    font-size: 2rem;
-    color: white;
-    cursor: pointer;
-    transition: background-position var(--transition-slow) ease, transform var(--transition-medium) ease; /* Animate background position */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .song-menu > button:hover {
-    background-position: right; /* Move the background to the right on hover */
-    transform: translateY(-4px); /* Lift the button on hover */
-  }
-  
-  .song-menu > button:active {
-    transform: translateY(2px); /* Slight depress effect on click */
-  }
-
-.gif-container{
   display: flex;
-  justify-content: flex-start; 
-  align-items: flex-start; 
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 20px;
+}
+
+.song-menu > button {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background-size: 200%; /* Expand the background size */
+  background-position: left; /* Start position for the gradient */
+  border: none;
+  border-radius: 60px;
+  padding: 1.5rem 2rem;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  transition:
+    background-position var(--transition-slow) ease,
+    transform var(--transition-medium) ease; /* Animate background position */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.song-menu > button:hover {
+  background-position: right; /* Move the background to the right on hover */
+  transform: translateY(-4px); /* Lift the button on hover */
+}
+
+.song-menu > button:active {
+  transform: translateY(2px); /* Slight depress effect on click */
+}
+
+.gif-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
   width: calc(100% - 40px);
   height: 100vh;
   justify-content: space-between;
 }
 
-.music-gif{
+.music-gif {
   filter: brightness(0.4);
-    position: absolute;
-    bottom:200px;
-    right:200px;
-    width: auto; 
-
+  position: absolute;
+  bottom: 200px;
+  right: 200px;
+  width: auto;
 }
 
 .music-gif > img {
-  width:200px;
-  height:auto;
+  width: 200px;
+  height: auto;
 }
 
 .car-gif {
   filter: brightness(0.4);
-    position: absolute;
-    bottom: 100px;
-    right: 200px;
-    z-index: 1;
+  position: absolute;
+  bottom: 100px;
+  right: 200px;
+  z-index: 1;
 }
 
 .car-gif > img {
   width: min(400px, 40vw);
-  height: auto; 
+  height: auto;
 }
 
 .lightning-gif {
-    position: absolute; 
-    top: 0; 
-    left: 0;
-    height: auto; 
-    z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: auto;
+  z-index: 1;
 }
 
 .lightning-gif > img {
-    width: min(180px, 20vw);
-    height: auto;
+  width: min(180px, 20vw);
+  height: auto;
 }
 
 @keyframes colorChange {
-  0% { color: red; }
-  20% { color: blue; }
-  40% { color: green; }
-  60% { color: purple; }
-  80% { color: orange; }
-  100% { color: red; }
+  0% {
+    color: red;
+  }
+  20% {
+    color: blue;
+  }
+  40% {
+    color: green;
+  }
+  60% {
+    color: purple;
+  }
+  80% {
+    color: orange;
+  }
+  100% {
+    color: red;
+  }
 }
